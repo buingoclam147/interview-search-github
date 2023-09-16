@@ -1,1 +1,24 @@
-<router-outlet></router-outlet>
+<div class="w-full flex gap-2 bg-white justify-between border-b-2  p-2">
+  <div class="text-[20px] items-center font-semibold text-blue-500 flex">
+    INTERVIEW
+  </div>
+  <div>
+    thanh search
+  </div>
+  <div class="flex gap-1">
+    <ng-container *ngIf="user() as user">
+      <div>
+        <div class="text-md font-semibold text-blue-400 cursor-pointer">
+          {{user.login}}
+        </div>
+        <div class="items-center flex font-semibold text-sm text-slate-500 cursor-pointer" (click)="logout()">
+          Logout
+        </div>
+      </div>
+      <div class="w-10 h-10 overflow-hidden rounded-full">
+        <img [src]="user.avatar_url" alt="Avatar" class="w-full h-full object-cover" [width]="40" [height]="40"
+          ng-optimized-image />
+      </div>
+    </ng-container>
+  </div>
+</div>
