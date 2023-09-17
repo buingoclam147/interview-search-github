@@ -1,0 +1,110 @@
+<form [formGroup]="form" *ngIf="{change: valueChange$() | async}" class="flex gap-2">
+  <div class="w-[400px]">
+    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzDropdownMenu]="listHistory()?.length ? menu: null"
+      nz-dropdown [nzTrigger]="'click'" (keyup.enter)="changeQ($event)">
+      <input type="text" nz-input placeholder="search ... " [formControlName]="fieldDynamic.Q" />
+    </nz-input-group>
+    <ng-template #suffixIconButton>
+      <button nz-button nzType="primary" nzSearch><span nz-icon nzType="search" (click)="changeQ()"></span></button>
+    </ng-template>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <div class="max-h-40 overflow-auto border-x border-b shadow-md z-50">
+        <ul nz-menu>
+          <li *ngFor="let itm of listHistory()||[]" nz-menu-item (click)="changeQ(itm)"
+            class="flex justify-between gap-2">
+            <span>{{ itm }}</span>
+            <span nz-icon nzType="clock-circle" nzTheme="outline"></span>
+          </li>
+        </ul>
+      </div>
+    </nz-dropdown-menu>
+  </div>
+  <button nz-button nzType="primary" nz-popover [nzPopoverTitle]="" [(nzPopoverVisible)]="isAdvancedSearchVisible"
+    nzPopoverTrigger="click" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="bottomRight"
+    [nzPopoverOverlayClassName]="'ant-popover-content.bg-slate-800'">Advanced
+    Search</button>
+
+  <ng-template #contentTemplate>
+    <div class="flex flex-col gap-2 w-[516px]">
+      <div class="flex flex-col gap-2">
+        <div class=" font-semibold">
+          Owner
+        </div>
+        <nz-input-group [nzSuffix]="inputClearTpl">
+          <input nz-input placeholder="Enter text ..." [formControlName]="fieldDynamic.OWNER" />
+        </nz-input-group>
+        <ng-template #inputClearTpl>
+          <span nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
+            *ngIf="form.controls[fieldDynamic.OWNER]?.value"
+            (click)="form.controls[fieldDynamic.OWNER].patchValue(null)"></span>
+        </ng-template>
+      </div>
+      <div class="flex flex-col gap-2 " *ngIf="form.controls[fieldDynamic.LANGUAGE]">
+        <div class=" font-semibold">
+          Programming language
+        </div>
+        <div class="flex gap-3 justify-between items-center w-full">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select language" [formControlName]="fieldDynamic.LANGUAGE"
+            [required]="true" class="w-full flex-1">
+            <nz-option [nzLabel]="item.name" [nzValue]="item.name" *ngFor="let item of listLanguage()"></nz-option>
+          </nz-select>
+          <span nz-icon nzType="delete" nzTheme="outline" class="cursor-pointer text-[18px] "
+            (click)="deleteFieldDynamic(fieldDynamic.LANGUAGE)"></span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 " *ngIf="form.controls[fieldDynamic.DATE_CREATE]">
+        <div class=" font-semibold">
+          Minimum created date
+        </div>
+        <div class="flex gap-3 justify-between items-center w-full">
+          <nz-date-picker [formControlName]="fieldDynamic.DATE_CREATE" class="w-full flex-1"></nz-date-picker>
+          <span nz-icon nzType="delete" nzTheme="outline" class="cursor-pointer text-[18px]"
+            (click)="deleteFieldDynamic(fieldDynamic.DATE_CREATE)"></span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 " *ngIf="form.controls[fieldDynamic.SIZE]">
+        <div class=" font-semibold">
+          Repository size
+        </div>
+        <div class="flex gap-3 justify-between items-center w-full">
+          <nz-slider [formControlName]="fieldDynamic.SIZE" [nzMarks]="marks" [nzTipFormatter]="formatter"
+            class="w-full flex-1"></nz-slider>
+          <span nz-icon nzType="delete" nzTheme="outline" class="cursor-pointer text-[18px]"
+            (click)="deleteFieldDynamic(fieldDynamic.SIZE)"></span>
+        </div>
+      </div>
+      <div>
+        <span class="border-b font-semibold inline cursor-pointer" [nz-tooltip] [nzTooltipTitle]="advanceMore"
+          nzTooltipTrigger="click" nzTooltipPlacement="bottom" #tooltip="nzTooltip">
+          + Add more filter
+        </span>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #advanceMore>
+    <div class="flex flex-col gap-2">
+      <div class="flex justify-between items-center gap-2 cursor-pointer"
+        (click)="addDynamicField(fieldDynamic.LANGUAGE)" *ngIf="!form.controls[fieldDynamic.LANGUAGE]">
+        <span>
+          Programming language
+        </span>
+        <span nz-icon nzType="right" nzTheme="outline"></span>
+      </div>
+      <div class="flex justify-between items-center gap-2 cursor-pointer"
+        (click)="addDynamicField(fieldDynamic.DATE_CREATE)" *ngIf="!form.controls[fieldDynamic.DATE_CREATE]">
+        <span>
+          Minimum created date
+        </span>
+        <span nz-icon nzType="right" nzTheme="outline"></span>
+      </div>
+      <div class="flex justify-between items-center gap-2 cursor-pointer" *ngIf="!form.controls[fieldDynamic.SIZE]"
+        (click)="addDynamicField(fieldDynamic.SIZE)">
+        <span>
+          Repository size
+        </span>
+        <span nz-icon nzType="right" nzTheme="outline"></span>
+      </div>
+    </div>
+  </ng-template>
+</form>

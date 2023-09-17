@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { APP_ROUTER } from '@core/constants';
@@ -11,8 +11,7 @@ import { tap } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   template: '',
-  styles: [
-  ]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RedirectComponent {
   private readonly redirect = toSignal(

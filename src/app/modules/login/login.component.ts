@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { AuthService } from '@core/services';
 
 @Component({
@@ -7,13 +7,10 @@ import { AuthService } from '@core/services';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './login.component.html',
-  styles: [
-  ]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
-  constructor(private readonly authService: AuthService) { }
-
   public login() {
-    this.authService.login();
+    Inject(AuthService).login();
   }
 }
