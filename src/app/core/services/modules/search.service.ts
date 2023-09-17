@@ -11,7 +11,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, map, of, pairwise, 
 })
 export class GithubService {
   private readonly apiUrl = GITHUB_API_URL;
-  private readonly _dataFilter$ = new BehaviorSubject<ISearchRepositoriesRequest>(SEARCH_DEFAULT);
+  public readonly _dataFilter$ = new BehaviorSubject<ISearchRepositoriesRequest>(SEARCH_DEFAULT);
   public readonly dataFilter$ = this._dataFilter$.asObservable().pipe(pairwise());
   private readonly _historySearch$ = new BehaviorSubject<string[]>([]);
   private readonly _valueSearch$ = new BehaviorSubject<string>('');
@@ -40,14 +40,18 @@ export class GithubService {
     this._dataFilter$.next({ ...this._dataFilter$.value, ...data });
   }
 
+  public nextPage(): void {
+    this._dataFilter$.next({ ...this._dataFilter$.value, page: this._dataFilter$.value.page + 1 });
+  }
+
   public get historySearch$(): Observable<string[]> {
     return this._historySearch$.asObservable();
   }
 
   public setHistorySearch(data: string): void {
     if (data) {
-      const index: number = localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) as string).findIndex((item: string) => item === data) : -1;
-      const listHistorySearch: string[] = localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) as string) : [];
+      const index = localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) as string).findIndex((item: string) => item === data) : -1;
+      const listHistorySearch = localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE.HISTORY_SEARCH) as string) : [];
       if (index > -1) {
         listHistorySearch.splice(index, 1);
       }
@@ -64,7 +68,7 @@ export class GithubService {
     }
     else {
       this._valueSearch$.next(data);
-      this._historySearch$.next(listHistorySearch.filter((option: string) => option.toLowerCase().includes(data.toLowerCase())));
+      this._historySearch$.next(listHistorySearch.filter(option => option.toLowerCase().includes(data.toLowerCase())));
     }
   }
 
@@ -76,7 +80,7 @@ export class GithubService {
   private logicGetListData$(): Observable<ISearchRepositoriesResponse> {
     return this.dataFilter$
       .pipe(
-        filter(([_, data]: ISearchRepositoriesRequest[]) => data.q !== ''),
+        filter(([_, currentValue]: ISearchRepositoriesRequest[]) => currentValue.q !== ''),
         switchMap(([previousValue, currentValue]: ISearchRepositoriesRequest[]) => {
           const combine$ = combineLatest({ list: this.search$('repositories', { ...currentValue }), filter: of([previousValue.page, currentValue.page]) });
           return combine$

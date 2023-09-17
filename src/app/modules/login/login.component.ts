@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '@core/services';
 
 @Component({
@@ -10,7 +10,10 @@ import { AuthService } from '@core/services';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
+
+  constructor(private authSvc: AuthService) { }
+
   public login() {
-    Inject(AuthService).login();
+    this.authSvc.login();
   }
 }

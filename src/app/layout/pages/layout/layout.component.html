@@ -1,24 +1,14 @@
-<div class="w-full flex gap-2 bg-white justify-between border-b-2  p-2">
-  <div class="text-[20px] items-center font-semibold text-blue-500 flex">
-    INTERVIEW
-  </div>
-  <div>
-    <app-search></app-search>
-  </div>
-  <div class="flex gap-1">
-    <ng-container *ngIf="user() as user">
-      <div>
-        <div class="text-md font-semibold text-blue-400 cursor-pointer">
-          {{user.login}}
-        </div>
-        <div class="items-center flex font-semibold text-sm text-slate-500 cursor-pointer" (click)="logout()">
-          Logout
+<div class="flex w-screen h-screen overflow-hidden text-sm bg-gray-200">
+  <div class="flex-auto h-full flex flex-col">
+    <div class="w-full">
+      <app-header></app-header>
+    </div>
+    <div class="flex-auto w-full tds-custom-scroll">
+      <div class="h-full w-full relative">
+        <div cdkScrollable class="absolute inset-0 overflow-y-auto overflow-x-visible tds-custom-scroll">
+          <router-outlet></router-outlet>
         </div>
       </div>
-      <div class="w-10 h-10 overflow-hidden rounded-full">
-        <img [src]="user.avatar_url" alt="Avatar" class="w-full h-full object-cover" [width]="40" [height]="40"
-          ng-optimized-image />
-      </div>
-    </ng-container>
+    </div>
   </div>
 </div>
