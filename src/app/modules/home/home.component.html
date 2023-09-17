@@ -1,7 +1,7 @@
 <div class="w-full h-full overflow-auto " (scroll)="onScroll()" #clSCroll>
-  <div class="flex flex-col gap-2 pt-3 px-3" *ngIf="listData()?.length || isLoading();  else empty">
-    <div class="border rounded-md p-2 bg-white" *ngFor="let itm of (listData() || [])">
-      <div class="flex gap-2 items-center">
+  <div class="flex flex-col gap-4 pt-3 px-3 justify-center items-center" *ngIf="listData()?.length || isLoading();  else empty">
+    <div class="rounded-md px-5 py-4 bg-white shadow-[rgba(149,157,165,0.2)_0px_8px_24px] 2xl:w-[700px]  w-full" *ngFor="let itm of (listData() || [])">
+      <div class="flex gap-2 items-center mb-2">
         <img [src]="(itm?.html_url | imgGithubFormat)" [alt]="itm?.html_url | imgGithubFormat" ng-optimized-image
           [width]="40" [height]=" 40" class="rounded-full border-2 border-solid">
         <span class="font-semibold text-[20px] text-[#2f81f7d9] cursor-pointer"

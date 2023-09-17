@@ -54,6 +54,7 @@ export class SearchComponent {
     0: '0Kb',
     100: '100Mb',
   };
+  defaltDate:Date = new Date('1/1/2020')
   fieldDynamic = FIELD_IN_DYNAMIC;
 
   constructor(
@@ -81,16 +82,27 @@ export class SearchComponent {
   }
 
   public changeQ(event?: Event | string): void {
-    if (event instanceof Event) this.form.patchValue({ q: (event.target as HTMLInputElement).value });
+    if (event instanceof Event){
+      event?.preventDefault();
+      event?.stopPropagation();
+      this.form.patchValue({ q: (event.target as HTMLInputElement).value });
+    } 
     else this.form.patchValue({ q: event || this.form.value.q });
     this.githubSvc.setDataFilter({ ...this.form.value, page: 1 });
     this.githubSvc.setHistorySearch(this.form.value.q);
   }
 
-  public addDynamicField(filed: string): void {
+  public addDynamicField(filed: FIELD_IN_DYNAMIC): void {
     this.tooltip.hide();
     this.tooltip.show();
-    this.form.addControl(filed, this.fb.control('', Validators.required));
+    switch (filed) {
+      case FIELD_IN_DYNAMIC.SIZE:
+        this.form.addControl(filed, this.fb.control([0, 50], Validators.required));
+        break;
+      default:
+        this.form.addControl(filed, this.fb.control('', Validators.required));
+        break;
+    }
   }
 
   public formatter(value: number): string {

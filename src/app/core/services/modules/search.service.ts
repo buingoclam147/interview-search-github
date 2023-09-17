@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { GITHUB_API_URL, LIST_REPOSITORIES, SEARCH_DEFAULT } from "@core/constants";
 import { LOCAL_STORAGE } from "@core/enums";
 import { ILanguageResponse, ISearchRepositoriesRequest, ISearchRepositoriesResponse } from "@core/models";
-import { loading } from "@core/utils";
+import { loading, mbToB } from "@core/utils";
 import { format } from "date-fns";
 import { BehaviorSubject, Observable, combineLatest, filter, map, of, pairwise, switchMap } from "rxjs";
 @Injectable({
@@ -28,16 +28,12 @@ export class GithubService {
   }
 
   public search$(type: string, query: ISearchRepositoriesRequest): Observable<ISearchRepositoriesResponse> {
-    const req = `q=${query.q}
-    ${query.owner ? '+owner%3A' + query.owner : ''}
-    ${query.language ? '+language%3A' + query.language : ''}
-    ${query.size ? '+size%3A' + query.size * 1_000 : ''}
-    ${query.created ? '+created%3A%3E' + format(new Date(query.created), 'yyyy-MM-dd') : ''}&page=${query.page}`
+    const req = `q=${query.q}${query.owner ? '+owner%3A' + query.owner : ''}${query.language ? '+language%3A' + query.language : ''}${query.size ? '+size%3A' + mbToB(query.size[0])+'..'+ mbToB(query.size[1]) : ''}${query.created ? '+created%3A%3E' + format(new Date(query.created), 'yyyy-MM-dd') : ''}&page=${query.page}`
     return this.http.get<ISearchRepositoriesResponse>(`${this.apiUrl}/search/${type}?${req}`).pipe(loading(this._isLoading$));
   }
 
   public setDataFilter(data: ISearchRepositoriesRequest): void {
-    this._dataFilter$.next({ ...this._dataFilter$.value, ...data });
+    this._dataFilter$.next({ ...data });
   }
 
   public nextPage(): void {

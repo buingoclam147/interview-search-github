@@ -5,7 +5,7 @@ export interface ISearchRequest {
   owner?: string;
   language?: string;
   created?: string;
-  size?: number;
+  size?: number[];
 }
 
 export interface ISearchRepositoriesRequest extends ISearchRequest { }

@@ -2,10 +2,10 @@
   <div class="w-[400px]">
     <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" [nzDropdownMenu]="listHistory()?.length ? menu: null"
       nz-dropdown [nzTrigger]="'click'" (keyup.enter)="changeQ($event)">
-      <input type="text" nz-input placeholder="search ... " [formControlName]="fieldDynamic.Q" />
+      <input class="py-2" type="text" nz-input placeholder="search ... " [formControlName]="fieldDynamic.Q" />
     </nz-input-group>
     <ng-template #suffixIconButton>
-      <button nz-button nzType="primary" nzSearch><span nz-icon nzType="search" (click)="changeQ()"></span></button>
+      <button class="w-[39px] h-[39px]" nz-button nzType="primary" nzSearch><span nz-icon nzType="search" (click)="changeQ()"></span></button>
     </ng-template>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <div class="max-h-40 overflow-auto border-x border-b shadow-md z-50">
@@ -19,7 +19,7 @@
       </div>
     </nz-dropdown-menu>
   </div>
-  <button nz-button nzType="primary" nz-popover [nzPopoverTitle]="" [(nzPopoverVisible)]="isAdvancedSearchVisible"
+  <button class="h-[39px]" nz-button nzType="primary" nz-popover [nzPopoverTitle]="" [(nzPopoverVisible)]="isAdvancedSearchVisible"
     nzPopoverTrigger="click" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="bottomRight"
     [nzPopoverOverlayClassName]="'ant-popover-content.bg-slate-800'">Advanced
     Search</button>
@@ -57,7 +57,7 @@
           Minimum created date
         </div>
         <div class="flex gap-3 justify-between items-center w-full">
-          <nz-date-picker [formControlName]="fieldDynamic.DATE_CREATE" class="w-full flex-1"></nz-date-picker>
+          <nz-date-picker [nzDefaultPickerValue]="defaltDate" [formControlName]="fieldDynamic.DATE_CREATE" class="w-full flex-1"></nz-date-picker>
           <span nz-icon nzType="delete" nzTheme="outline" class="cursor-pointer text-[18px]"
             (click)="deleteFieldDynamic(fieldDynamic.DATE_CREATE)"></span>
         </div>
@@ -67,7 +67,7 @@
           Repository size
         </div>
         <div class="flex gap-3 justify-between items-center w-full">
-          <nz-slider [formControlName]="fieldDynamic.SIZE" [nzMarks]="marks" [nzTipFormatter]="formatter"
+          <nz-slider nzRange [formControlName]="fieldDynamic.SIZE" [nzMarks]="marks" [nzTipFormatter]="formatter"
             class="w-full flex-1"></nz-slider>
           <span nz-icon nzType="delete" nzTheme="outline" class="cursor-pointer text-[18px]"
             (click)="deleteFieldDynamic(fieldDynamic.SIZE)"></span>
