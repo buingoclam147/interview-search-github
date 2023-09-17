@@ -1,1 +1,46 @@
-<p>home works!</p>
+<div class="w-full h-full overflow-auto " (scroll)="onScroll()" #clSCroll>
+  <div class="flex flex-col gap-2 pt-3 px-3" *ngIf="listData()?.length || isLoading();  else empty">
+    <div class="border rounded-md p-2 bg-white" *ngFor="let itm of (listData() || [])">
+      <div class="flex gap-2 items-center">
+        <img [src]="(itm?.html_url | imgGithubFormat)" [alt]="itm?.html_url | imgGithubFormat" ng-optimized-image
+          [width]="40" [height]=" 40" class="rounded-full border-2 border-solid">
+        <span class="font-semibold text-[20px] text-[#2f81f7d9] cursor-pointer"
+          (click)="navigateUrl(itm?.clone_url || itm?.html_url)">
+          {{itm?.full_name ||'---'}}
+        </span>
+        <div *ngIf="itm?.archived" class="border p-1 border-orange-600 text-orange-600 rounded-md">
+          <span class="text-[14px]">
+            Public archive
+          </span>
+        </div>
+      </div>
+      <div class="text-[16px]">
+        {{itm?.description}}
+      </div>
+      <div class="flex gap-2">
+        <div class="text-[14px] font-semibold">
+          {{itm?.language}}
+        </div>
+        <div class="flex items-center">
+          <span nz-icon nzType="star" nzTheme="fill" class="mr-1 text-yellow-400"></span>
+          <span class="text-[14px]">
+            {{itm?.stargazers_count}}
+          </span>
+        </div>
+        <div>
+          <span class="text-[14px]">
+            <span class="font-semibold">Update on:</span> {{itm?.updated_at | date: 'dd/MM/yyyy'}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center p-2" *ngIf="isLoading()">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+  </div>
+</div>
+<ng-template #empty>
+  <div class="w-full h-full pt-3">
+    <nz-empty></nz-empty>
+  </div>
+</ng-template>
